@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+		<link rel="stylesheet" href="css/jquerym.css" />
+		<script src="js/jquery.js"></script>
+		<script src="js/jquery2.js"></script>
+	    <link href='themes/Yup.css' rel='stylesheet' />
+		<link href='calendar/fullcalendar.css' rel='stylesheet' />
+		<link href='calendar/fullcalendar.print.css' rel='stylesheet' media='print' />
+		<script src='calendar/lib/moment.min.js'></script>
+		<script src='calendar/lib/jquery.min.js'></script>
+		<script src='calendar/fullcalendar.min.js'></script>
+		<script src='calendar/lang/ro.js'></script>
+		<script type="text/javascript" charset="utf-8" src="js/SQLitePlugin.js"></script>
+        <title>Bani de buzunar</title>
+    </head>
+    <body >
+
+		<!-- ACASA -->
+		<div style="margin-top:-2px;" data-theme="c" data-role="page" id="acasa">
+		
+			<!-- Navbar -->
+			<div data-role="header" style="overflow:hidden;" role="banner" class="ui-header ui-bar-inherit">
+				<h1 class="ui-title" role="heading" aria-level="1">Bani de buzunar</h1>
+					<a data-transition="pop" href="#setari" data-icon="gear" class="ui-btn-right ui-link ui-btn ui-icon-gear ui-btn-icon-left ui-shadow ui-corner-all" data-role="button" role="button">Setari</a>
+					<div data-role="navbar" class="ui-navbar" role="navigation">
+						<ul class="ui-grid-b">
+							<li class="ui-block-b"><a data-transition="pop" href="#insert-money" class="ui-link ui-btn ui-icon-edit ui-btn-icon-left">Introduce suma</a></li>
+							<li class="ui-block-c"><a data-transition="pop" href="#" class="ui-btn-active ui-link ui-btn ui-icon-home ui-btn-icon-left">Acasa</a></li>
+							<li data-icon="home" class="ui-block-c"><a data-transition="pop" href="#buget" class="ui-link ui-btn ui-icon-info ui-btn-icon-left">Buget</a></li>
+						</ul>
+					</div><!-- /navbar -->
+			</div><!-- /header -->
+			
+			
+			<div role="main" class="ui-content">
+				
+				<div style="margin-top:30px; background-color:white;" id='calendar'></div>
+				
+				<div id="ui-body-test" class="ui-body ui-body-a ui-corner-all" style="margin-bottom:1em; margin-top:45px;">
+				<h4> Legenda </h4>
+				<hr>
+				<p> Suma rezervata pentru weekend-uri este comuna.</p>
+				</div>
+				
+				<div id="ui-body-test" class="ui-body ui-body-a ui-corner-all" style="margin-bottom:1em; margin-top:25px;">
+				<h4> Economii </h4>
+				<hr>
+				<p> <span id="economii-nr">x</span> lei </p>
+				</div>
+			</div><!-- /content -->
+			
+		</div>
+
+
+		<!-- Introducere suma -->
+		<div style="margin-top:-2px;" data-theme="c" data-role="page" id="insert-money">
+		
+			<!-- Navbar -->
+			<div data-role="header" style="overflow:hidden;" role="banner" class="ui-header ui-bar-inherit">
+				<h1 class="ui-title" role="heading" aria-level="1">Bani de buzunar</h1>
+					<a data-transition="pop" href="#setari" data-icon="gear" class="ui-btn-right ui-link ui-btn ui-icon-gear ui-btn-icon-left ui-shadow ui-corner-all" data-role="button" role="button">Setari</a>
+					<div data-role="navbar" class="ui-navbar" role="navigation">
+						<ul class="ui-grid-b">
+							<li class="ui-block-b"><a data-transition="pop" href="#" class="ui-btn-active ui-link ui-btn ui-icon-edit ui-btn-icon-left">Introduce suma</a></li>
+							<li class="ui-block-c"><a data-transition="pop" href="#acasa" class="ui-link ui-btn ui-icon-home ui-btn-icon-left">Acasa</a></li>
+							<li data-icon="home" class="ui-block-c"><a data-transition="pop" href="#buget" class="ui-link ui-btn ui-icon-info ui-btn-icon-left">Buget</a></li>
+						</ul>
+					</div><!-- /navbar -->
+			</div><!-- /header -->
+			
+			
+			<div role="main" class="ui-content">
+			
+				<div class="ui-body ui-body-a ui-corner-all" style="width:80%; margin:auto; margin-top:20px;">
+				<!--
+					<p> Data incasarii banilor</p>
+					<fieldset class="ui-grid-b">
+					<div style="padding-left:5px; padding-right:10px;" class="ui-block-a">An<input  type="number" name="an" id="an" value="2014"></div>
+					<div class="ui-block-b">Luna<input  type="number" name="luna" id="luna" value=""></div>
+					<div style="padding-left:10px; padding-right:5px;" class="ui-block-c">Zi<input  type="number" name="zi" id="zi" value=""></div>
+					</fieldset>
+					<br>
+					<hr>
+				-->
+					<br>
+					<p> Adauga suma de bani </p>
+					<input type="number" name="suma" pattern="[0-9]*" id="suma" value="">
+					
+					<a href="#acasa"><button onclick="adauga_bani()" style="margin-top:30px;" class="ui-btn ui-icon-carat-r ui-btn-icon-left ui-shadow ui-corner-all">Trimite</button></a>
+				</div>
+				
+				<div class="ui-body ui-body-a ui-corner-all" style="width:80%; margin:auto; margin-top:40px;">
+					<br>
+					<p> Suma de bani cheltuita astazi </p>
+					<input type="number" name="suma_cheltuita" pattern="[0-9]*" id="suma_cheltuita" value="">
+					
+					<a href="#acasa"><button onclick="suma_cheltuita()" style="margin-top:30px;" class="ui-btn ui-icon-carat-r ui-btn-icon-left ui-shadow ui-corner-all">Trimite</button></a>
+				</div>
+		
+			</div><!-- /content -->
+
+		</div><!-- /page -->
+		
+		<!-- Buget -->
+		<div style="margin-top:-2px;" data-theme="c" data-role="page" id="buget">
+		
+			<!-- Navbar -->
+			<div data-role="header" style="overflow:hidden;" role="banner" class="ui-header ui-bar-inherit">
+				<h1 class="ui-title" role="heading" aria-level="1">Bani de buzunar</h1>
+					<a data-transition="pop" href="#setari" data-icon="gear" class="ui-btn-right ui-link ui-btn ui-icon-gear ui-btn-icon-left ui-shadow ui-corner-all" data-role="button" role="button">Setari</a>
+					<div data-role="navbar" class="ui-navbar" role="navigation">
+						<ul class="ui-grid-b">
+							<li class="ui-block-b"><a data-transition="pop" href="#insert-money" class="ui-link ui-btn ui-icon-edit ui-btn-icon-left">Introduce suma</a></li>
+							<li class="ui-block-c"><a data-transition="pop" href="#acasa" class="ui-link ui-btn ui-icon-home ui-btn-icon-left">Acasa</a></li>
+							<li data-icon="home" class="ui-block-c"><a data-transition="pop" href="#buget" class="ui-btn-active ui-link ui-btn ui-icon-info ui-btn-icon-left">Buget</a></li>
+						</ul>
+					</div><!-- /navbar -->
+			</div><!-- /header -->
+			
+			
+			<div role="main" class="ui-content">
+			
+				<div style="width:80%; margin:auto; margin-top:20px;">
+	
+
+				<a data-transition="pop" href="#b1" class="ui-btn ui-shadow">Plan personal de cheltuieli si economii</a>
+				<br>
+				<a data-transition="pop" href="#b2" class="ui-btn ui-shadow">Bugetul lunar al familiei tale</a>
+			</div>
+			
+					</p>
+				</div>
+		
+			</div><!-- /content -->
+
+		</div><!-- /page -->
+		
+		
+		<div style="margin-top:-2px;" data-theme="c" data-role="page" id="b1">
+		
+			<!-- Navbar -->
+			<div data-role="header" style="overflow:hidden;" role="banner" class="ui-header ui-bar-inherit">
+				<h1 class="ui-title" role="heading" aria-level="1">Bani de buzunar</h1>
+					<a data-transition="pop" href="#setari" data-icon="gear" class="ui-btn-right ui-link ui-btn ui-icon-gear ui-btn-icon-left ui-shadow ui-corner-all" data-role="button" role="button">Setari</a>
+					<div data-role="navbar" class="ui-navbar" role="navigation">
+						<ul class="ui-grid-b">
+							<li class="ui-block-b"><a data-transition="pop" href="#insert-money" class="ui-link ui-btn ui-icon-edit ui-btn-icon-left">Introduce suma</a></li>
+							<li class="ui-block-c"><a data-transition="pop" href="#acasa" class="ui-link ui-btn ui-icon-home ui-btn-icon-left">Acasa</a></li>
+							<li data-icon="home" class="ui-block-c"><a data-transition="pop" href="#buget" class="ui-btn-active ui-link ui-btn ui-icon-info ui-btn-icon-left">Buget</a></li>
+						</ul>
+					</div><!-- /navbar -->
+			</div><!-- /header -->
+			
+			
+			<div role="main" class="ui-content">
+			<style>
+			table {
+				border-collapse: collapse;
+				 border-color: #802832;
+			}
+
+			table, td, th {
+				border: 1px solid black;
+				border-color: #802832
+			}
+			</style>
+				<div class="ui-body ui-body-a ui-corner-all" style="width:90%; margin:auto; margin-top:20px;">
+					<table style="width:100% ">
+					 <thead>
+						  <tr>
+							<td style="text-align:center;"><b>Sursa de venit</b></td>
+							<td style="text-align:center;"><b>Valoare (RON)</b></td>		
+						  </tr>
+					 </thead>
+					  <tbody>
+						  <tr>
+							<td style="text-align:center;">Alocatie</td>
+							<td><input pattern="[0-9]*" onchange="calcul_r1()" id="1" type="number" name="text-1" id="text-1" value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Parinti</td>
+							<td><input pattern="[0-9]*" onchange="calcul_r1()" id="2" type="number" name="text-1" id="text-1" value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Job</td>
+							<td><input pattern="[0-9]*" onchange="calcul_r1()" id="3" type="number" name="text-1" id="text-1" value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Alte surse</td>
+							<td><input pattern="[0-9]*" onchange="calcul_r1()" id="4" type="number" name="text-1" id="text-1" value="0"></td>
+						  </tr>
+						   <tr>
+							<th colspan="2">Total venituri</th>
+						  </tr>
+						  <tr>
+							<td id="r1" style="text-align:center; height:45px;" colspan="2">0 lei</td>
+						  </tr>
+						  <tr>
+							<th colspan="2">Cheltuieli</th>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Mancare</td>
+							<td><input id="6" pattern="[0-9]*" onchange="calcul_r2()" type="number" name="text-1" id="text-1" value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Haine</td>
+							<td><input id="7" pattern="[0-9]*" onchange="calcul_r2()" type="number" name="text-1" id="text-1" value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Rechizite</td>
+							<td><input id="8" pattern="[0-9]*" onchange="calcul_r2()" type="number" name="text-1" id="text-1" value="0"></td>
+						  </tr>
+						   <tr>
+							<td style="text-align:center;">Utilitati</td>
+							<td><input id="9" pattern="[0-9]*" onchange="calcul_r2()" type="number" name="text-1" id="text-1" value="0"></td>
+						  </tr>
+						   <tr>
+							<td style="text-align:center;">Iesiri</td>
+							<td><input id="10" pattern="[0-9]*" onchange="calcul_r2()" type="number" name="text-1" id="text-1" value="0"></td>
+						  </tr>
+						   <tr>
+							<td style="text-align:center;">Cadouri</td>
+							<td><input id="11" pattern="[0-9]*" onchange="calcul_r2()" type="number" name="text-1" id="text-1" value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Alte cheltuieli</td>
+							<td><input id="12" pattern="[0-9]*" onchange="calcul_r2()" type="number" name="text-1" id="text-1" value="0"></td>
+						  </tr>
+						   <tr>
+							<th colspan="2">Total cheltuieli</th>
+						  </tr>
+						   <tr>
+							<td id="r2" style="text-align:center; height:45px;" colspan="2">0 lei</td>
+						  </tr>
+						  <tr>
+							<th colspan="2">Economii</th>
+						  </tr>
+						   <tr>
+							<td id="r1-r2" style="text-align:center; height:45px;" colspan="2">0 lei</td>
+						  </tr>
+				    </tbody>
+					</table>
+				</div>
+			
+			</div>
+		
+
+		</div><!-- /page -->
+		
+		
+		<!-- B2 -->
+		<div style="margin-top:-2px;" data-theme="c" data-role="page" id="b2">
+		
+			<!-- Navbar -->
+			<div data-role="header" style="overflow:hidden;" role="banner" class="ui-header ui-bar-inherit">
+				<h1 class="ui-title" role="heading" aria-level="1">Bani de buzunar</h1>
+					<a data-transition="pop" href="#setari" data-icon="gear" class="ui-btn-right ui-link ui-btn ui-icon-gear ui-btn-icon-left ui-shadow ui-corner-all" data-role="button" role="button">Setari</a>
+					<div data-role="navbar" class="ui-navbar" role="navigation">
+						<ul class="ui-grid-b">
+							<li class="ui-block-b"><a data-transition="pop" href="#insert-money" class="ui-link ui-btn ui-icon-edit ui-btn-icon-left">Introduce suma</a></li>
+							<li class="ui-block-c"><a data-transition="pop" href="#acasa" class="ui-link ui-btn ui-icon-home ui-btn-icon-left">Acasa</a></li>
+							<li data-icon="home" class="ui-block-c"><a data-transition="pop" href="#buget" class="ui-btn-active ui-link ui-btn ui-icon-info ui-btn-icon-left">Buget</a></li>
+						</ul>
+					</div><!-- /navbar -->
+			</div><!-- /header -->
+			
+			
+			<div role="main" class="ui-content">
+			<style>
+			table {
+				border-collapse: collapse;
+				 border-color: #802832;
+			}
+
+			table, td, th {
+				border: 1px solid black;
+				border-color: #802832
+			}
+			</style>
+				<div class="ui-body ui-body-a ui-corner-all" style="width:90%; margin:auto; margin-top:20px;">
+					<table style="width:100% ">
+					 <thead>
+						  <tr>
+							<td style="text-align:center;"><b>Sursa de venit</b></td>
+							<td style="text-align:center;"><b>Valoare (RON)</b></td>		
+						  </tr>
+					 </thead>
+					  <tbody>
+						<tr>
+							<th style="font-size:145%; height:70px;" colspan="2">Venituri</th>
+						  </tr>
+					  	  <tr>
+							<th colspan="2">Venit sursa 1</th>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Salariu</td>
+							<td><input id="13" pattern="[0-9]*" onchange="calcul_r3()" type="number" name="text-1" id="text-1" value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Prime</td>
+							<td><input pattern="[0-9]*" onchange="calcul_r3()" id="14" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  
+						  <tr>
+							<th colspan="2">Venit sursa 2</th>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Salariu</td>
+							<td><input pattern="[0-9]*" onchange="calcul_r3()" id="15" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Prime</td>
+							<td><input pattern="[0-9]*" onchange="calcul_r3()" id="16" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  
+						  <tr>
+							<th colspan="2">Venit de la stat</th>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Alocatie</td>
+							<td><input pattern="[0-9]*" onchange="calcul_r3()" id="17" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Ajutoare sociale</td>
+							<td><input pattern="[0-9]*" onchange="calcul_r3()" id="18" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  
+						  <tr>
+							<th colspan="2">Alte categorii</th>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Venit copil ( daca e cazul )</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r3()" id="19" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  
+						  <tr>
+							<td style="text-align:center;">Alte surse</td>
+							<td><input pattern="[0-9]*" onchange="calcul_r3()" id="20"type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  
+						  <tr>
+							<td style="text-align:center;">Economii</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r3()" id="21" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  
+						   <tr>
+							<th colspan="2">Venit total</th>
+						  </tr>
+						   <tr>
+							<td id="r3" style="text-align:center; height:45px;" colspan="2">0 lei</td>
+						  </tr>
+						  
+						  <tr>
+							<th style="font-size:145%; height:70px;" colspan="2">Cheltuieli</th>
+						  </tr>
+						  
+						  <tr>
+							<th colspan="2">Utilitati</th>
+						  </tr>
+						  
+						   <tr>
+							<td style="text-align:center;">Curent electric</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="22" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  
+						  <tr>
+							<td style="text-align:center;">Gaz</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="23" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  
+						  <tr>
+							<td style="text-align:center;">Apa + canalizare</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="24" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Administratie</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="25" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Abonament cablu TV + internet + telefon</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="26" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Telefon mobil</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="27" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  
+						  <tr>
+							<th colspan="2">Transport</th>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Asigurare masina</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="28" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Combustibil</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="29" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Abonament transport public</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="30" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  
+						   <tr>
+							<th colspan="2">Servicii sanitare</th>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Asigurare de sanatate</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="31" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Tratament medical</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="32" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Medicamente</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="33" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  
+						  <tr>
+							<th colspan="2">Nevoi</th>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Mancare</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="34" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Haine</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="35" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Produse de curatat</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="36" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Iesiri</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="37" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  
+						  <tr>
+							<th colspan="2">Costuri copii</th>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Educatie</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="38" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Ingrijire copil</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="39" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Bani de buzunar</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="40" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  
+						   <tr>
+							<th colspan="2">Alte categorii</th>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Asigurare de viata</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="41" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Taxe si impozite</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="42" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  <tr>
+							<td style="text-align:center;">Alte cheltuieli</td>
+							<td><input  pattern="[0-9]*" onchange="calcul_r4()" id="43" type="number" name="text-1"  value="0"></td>
+						  </tr>
+						  
+						  <tr>
+							<th colspan="2">Total cheltuieli</th>
+						  </tr>
+						   <tr>
+							<td id="r4" style="text-align:center; height:45px;" colspan="2">0 lei</td>
+						  </tr>
+						  
+						  <tr>
+							<th colspan="2">Economii</th>
+						  </tr>
+						   <tr>
+							<td id="r3-r4" style="text-align:center; height:45px;" colspan="2">0 lei</td>
+						  </tr>
+				    </tbody>
+					</table>
+				</div>
+			
+			</div>
+
+		</div><!-- /page -->
+
+		
+		<!-- Setari -->
+		<div style="margin-top:-2px;" data-theme="c" data-role="page" id="setari">
+		
+			<!-- Navbar -->
+			<div data-role="header" style="overflow:hidden;" role="banner" class="ui-header ui-bar-inherit">
+				<h1 class="ui-title" role="heading" aria-level="1">Bani de buzunar</h1>
+					<a href="#" data-icon="gear" class="ui-btn-right ui-link ui-btn ui-icon-gear ui-btn-icon-left ui-shadow ui-corner-all" data-role="button" role="button">Setari</a>
+					<div data-role="navbar" class="ui-navbar" role="navigation">
+						<ul class="ui-grid-b">
+							<li class="ui-block-b"><a data-transition="pop" href="#insert-money" class="ui-link ui-btn ui-icon-edit ui-btn-icon-left">Introduce suma</a></li>
+							<li class="ui-block-c"><a data-transition="pop" href="#acasa" class="ui-link ui-btn ui-icon-home ui-btn-icon-left">Acasa</a></li>
+							<li data-icon="home" class="ui-block-c"><a data-transition="pop" href="#buget" class="ui-link ui-btn ui-icon-info ui-btn-icon-left">Buget</a></li>
+						</ul>
+					</div><!-- /navbar -->
+			</div><!-- /header -->
+			
+			
+			<div role="main" class="ui-content">
+			
+				<div style="width:80%; margin:auto; margin-top:20px;">
+				<div id="ui-body-test" class="ui-body ui-body-a ui-corner-all" style="margin-bottom:1em; margin-top:45px;">
+					<h4> Setari </h4>
+					<hr>
+					<!--
+					<fieldset data-role="controlgroup" data-type="horizontal" class="ui-controlgroup ui-controlgroup-horizontal ui-corner-all">Tema:<div class="ui-controlgroup-controls ">
+					
+					
+					<div style="margin-left:10px;" class="ui-radio"><label for="a" class="ui-btn ui-corner-all ui-btn-inherit ui-first-child ui-btn-active ui-radio-on">Deschisa</label><input type="radio" name="theme" id="a" checked="" data-cacheval="false"></div>
+					
+					<div class="ui-radio"><label for="b" class="ui-btn ui-corner-all ui-btn-inherit ui-last-child ui-radio-off">Inchisa</label><input type="radio" name="theme" id="b" data-cacheval="true"></div>
+				</div></fieldset>
+				   -->
+				<br>
+				<fieldset data-role="controlgroup" data-type="horizontal" class="ui-controlgroup ui-controlgroup-horizontal ui-corner-all">
+		   <span style=""> Sterge datele aplicatiei: </span>
+			<div data-demo-html="true">
+			
+				<a style="margin-top:5px; margin-left:10px;" href="#popupDialog" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a" aria-haspopup="true" aria-owns="popupDialog" aria-expanded="false">Click</a>
+
+				<div data-role="popup" id="popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="false" style="max-width:400px;" class="ui-popup ui-body-a ui-overlay-shadow ui-corner-all">
+					<div data-role="header" data-theme="a" role="banner" class="ui-header ui-bar-a">
+					<h1 class="ui-title" role="heading" aria-level="1">Sterge datele aplicateii</h1>
+					</div>
+					<div role="main" class="ui-content">
+						<h3 class="ui-title">Esti sigur ca vrei sa faci acest lucru ?</h3>
+					<p>Aceasta actiune este ireversibila.</p>
+						<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a" data-rel="back">Anuleaza</a>
+						<a href="#" onclick="sterge()" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a" data-rel="back" data-transition="flow">Continua</a>
+					</div>
+				</div>
+			</div>
+			</fieldset>
+				</div>
+				</div>
+		
+			</div><!-- /content -->
+
+		</div><!-- /page -->
+		
+        <script type="text/javascript" src="cordova.js"></script>
+		
+	<script>
+	start();
+	tabel();
+	numara_economii();
+	function numara_economii()
+	{
+		var suma=document.getElementById("suma_cheltuita").value;
+		document.addEventListener("deviceready", onDeviceReady, false);
+		function onDeviceReady() {
+			$(document).ready(function() {
+					var db = window.sqlitePlugin.openDatabase("Database", "1.0", "Demo", -1);
+		
+					db.transaction(function(tx) {
+						var ec=0;
+						tx.executeSql("SELECT * from bani;", [], function(tx, res) {
+							for(var i=0; i<res.rows.length; i++)
+							{
+								ec+=res.rows.item(i).economii;
+							}
+							document.getElementById('economii-nr').innerHTML=ec;
+						});
+				
+					});
+					});
+
+			}
+	}
+	function adauga_bani()
+	{
+	var suma=document.getElementById("suma").value;
+	document.addEventListener("deviceready", onDeviceReady, false);
+	function onDeviceReady() {
+		$(document).ready(function() {
+				var db = window.sqlitePlugin.openDatabase("Database", "1.0", "Demo", -1);
+
+				db.transaction(function(tx) {
+					tx.executeSql("INSERT INTO bani (suma) VALUES (?)", [suma], function(tx, res) {
+						//alert("adauga_bani");
+						location.reload();
+					});
+				});
+				});
+
+		}
+	}
+	function suma_cheltuita()
+	{
+		var suma=document.getElementById("suma_cheltuita").value;
+		document.addEventListener("deviceready", onDeviceReady, false);
+		function onDeviceReady() {
+			$(document).ready(function() {
+					var db = window.sqlitePlugin.openDatabase("Database", "1.0", "Demo", -1);
+		
+					db.transaction(function(tx) {
+						var sum=0;
+						tx.executeSql("SELECT * from bani;", [], function(tx, res) {
+							for(var i=0; i<res.rows.length; i++)
+							{
+								sum+=res.rows.item(i).suma;
+							}
+							var pe_zi_lucratoare=Math.round(2.5/100*sum); 
+							suma=pe_zi_lucratoare-suma;
+							if(suma<0)
+								suma=0;
+								
+							tx.executeSql("INSERT INTO bani (economii) VALUES (?)", [suma], function(tx, res) {
+								location.reload();
+							});
+						});
+						
+				
+					});
+					});
+
+			}
+	}
+	
+	function prima_sambata(nr)
+	{
+	  if(nr==11)//DEC
+		return 6;
+	  if(nr==0)//IAN
+		return 3;
+	  if(nr==1) //FEB
+		return 1;
+	  if(nr==2) //MART
+	    return 1;
+	  if(nr==3) //APRIL
+	    return 4;
+	  if(nr==4) //MAI
+	    return 2; 
+	}
+	
+	function ultima_zi(nr)
+	{
+	  if(nr==12)//DEC
+		return 31;
+	  if(nr==1)//IAN
+		return 31;
+	  if(nr==2) //FEB
+		return 28;
+	  if(nr==3) //MART
+	    return 31;
+	  if(nr==4) //APRIL
+	    return 30;
+	  if(nr==5) //MAI
+	    return 31; 
+	
+	}
+	
+	function tabel()
+	{
+		document.addEventListener("deviceready", onDeviceReady, false);
+		var sum=0;
+		function onDeviceReady() {
+		$(document).ready(function() {
+				var db = window.sqlitePlugin.openDatabase("Database", "1.0", "Demo", -1);
+				db.transaction(function(tx) {
+		
+					tx.executeSql("SELECT * from bani;", [], function(tx, res) {
+					   for(var i=0; i<res.rows.length; i++)
+					   {
+						 sum+=res.rows.item(i).suma;
+					   }
+						
+						//alert("tabel : "+ res.rows.length+" suma="+sum);
+						 var date = new Date();
+	
+					  var an= date.getFullYear();;
+					  var luna = date.getMonth() + 1 ;
+					  if(luna >= 13 )
+						luna-=12;
+					  var zi= date.getDate();
+					  var zi_saptamanii = date.getDay();
+					  
+					  var pe_zi_lucratoare=Math.round(2.5/100*sum); 
+					  var pe_weekend=Math.round(30/100*sum);
+						var events = [];
+						for(var i = 1; i <= 31; i++) {
+						
+							if(zi>ultima_zi(luna))
+							{
+								zi=1;
+								if(luna==12)
+									{
+									 luna=1;
+									 an++;
+									 }
+							}
+							if(zi_saptamanii==6)
+							{
+								var zi2=zi+2;
+								if(zi2<10)
+								  zi2='0'+zi2;
+								var luna2=luna;
+								if(luna2<10)
+								  luna2='0'+luna2;
+								var zi3=zi;
+								if(zi3<10)
+								   zi3='0'+zi3;
+								   
+								events.push({title: pe_weekend+' lei', start: an+'-'+luna2+'-'+zi3, end: an+'-'+luna2+'-'+zi2});
+								zi++; i++;
+								zi_saptamanii=0;
+							}
+							else
+							{
+								var zi2=zi;
+								if(zi2<10)
+								   zi2='0'+zi2;
+								
+								var luna2=luna;
+								if(luna2<10)
+								  luna2='0'+luna2;
+								   
+								events.push({title: pe_zi_lucratoare+' lei', start: an+'-'+luna2+'-'+zi2});
+							}
+								
+							zi++; zi_saptamanii++;
+						}
+						$('#calendar').fullCalendar({
+							header: {
+								left: 'prev,next today',
+								center: 'title',
+								right: 'month,basicWeek'
+							},
+							defaultDate: '2014-12-15',
+							editable: true,
+							eventLimit: true, // allow "more" link when too many events
+							events: events
+						});
+				
+					 });
+				});
+							
+		});
+		}
+	}
+	
+	
+	function start()
+	{
+	  document.addEventListener("deviceready", onDeviceReady, false);
+      function onDeviceReady() {
+        var db = window.sqlitePlugin.openDatabase("Database", "1.0", "Demo", -1);
+
+        db.transaction(function(tx) {
+		tx.executeSql('CREATE TABLE IF NOT EXISTS bani (id integer primary key, suma integer, economii integer)');
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS cheltuieli (id integer primary key, suma integer)');
+		//alert("Start");
+     
+        });
+    
+	  }
+	}
+	
+	function sterge()
+	{
+		document.addEventListener("deviceready", onDeviceReady, false);
+        function onDeviceReady() {
+        var db = window.sqlitePlugin.openDatabase("Database", "1.0", "Demo", -1);
+
+        db.transaction(function(tx) {
+		tx.executeSql('DROP TABLE IF EXISTS bani');
+		tx.executeSql('DROP TABLE IF EXISTS cheltuieli');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS bani (id integer primary key, suma integer, economii integer)');
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS cheltuieli (id integer primary key, suma integer)');
+	   // alert("sterge");
+		location.reload();
+        });
+	  }
+	}
+	
+	function calcul_r1()
+	{
+		var sum=0;
+		for(var i=1; i<=4; i++)
+		{
+			if(document.getElementById(i).value!=null)
+				sum+=parseInt(document.getElementById(i).value);
+		}
+		
+		document.getElementById("r1").innerHTML=parseInt(sum) + " lei ";
+		calcul_r1_r2();
+	}
+	
+	function calcul_r2()
+	{
+		var sum=0;
+		for(var i=6; i<=12; i++)
+		{
+			if(document.getElementById(i).value!=null)
+				sum+=parseInt(document.getElementById(i).value);
+		}
+		
+		document.getElementById("r2").innerHTML=parseInt(sum) + " lei ";
+		calcul_r1_r2();
+			
+	}
+	function calcul_r1_r2()
+	{
+		var sum=0;
+		for(var i=1; i<=4; i++)
+		{
+			if(document.getElementById(i).value!=null)
+				sum+=parseInt(document.getElementById(i).value);
+		}
+		for(var i=6; i<=12; i++)
+		{
+			if(document.getElementById(i).value!=null)
+				sum-=parseInt(document.getElementById(i).value);
+		}
+		
+		document.getElementById("r1-r2").innerHTML=parseInt(sum) + " lei ";
+	}
+	
+	function calcul_r3()
+	{
+		var sum=0;
+		for(var i=6; i<=21; i++)
+		{
+			if(document.getElementById(i).value!=null)
+				sum+=parseInt(document.getElementById(i).value);
+		}
+		
+		document.getElementById("r3").innerHTML=parseInt(sum) + " lei ";	
+		calcul_r3_r4();		
+	}
+	
+	function calcul_r4()
+	{
+		var sum=0;
+		for(var i=22; i<=43; i++)
+		{
+			if(document.getElementById(i).value!=null)
+				sum+=parseInt(document.getElementById(i).value);
+		}
+		
+		document.getElementById("r4").innerHTML=parseInt(sum) + " lei ";	
+		calcul_r3_r4();		
+	}
+	
+	function calcul_r3_r4()
+	{
+		var sum=0;
+		for(var i=6; i<=21; i++)
+		{
+			if(document.getElementById(i).value!=null)
+				sum+=parseInt(document.getElementById(i).value);
+		}
+		for(var i=22; i<=43; i++)
+		{
+			if(document.getElementById(i).value!=null)
+				sum-=parseInt(document.getElementById(i).value);
+		}
+		
+		document.getElementById("r3-r4").innerHTML=parseInt(sum) + " lei ";
+	}
+
+	</script>
+	<style>
+	 .fc-title
+	 {
+		color:white;
+		font-weight: normal;
+	}
+	</style>
+
+
+   <div onload="init();" id="stage" class="theme">
+   </div>
+</html>
